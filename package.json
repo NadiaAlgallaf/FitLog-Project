@@ -1,0 +1,20 @@
+{
+  "name": "fitlog",
+  "version": "1.0.0",
+  "description": "The FitLog App is a full-stack web application that allows users to create and manage personalized workout routines. After signing up and logging in, users can build routines, add exercises, and track details such as sets, repetitions, and weight. Each routine can be set to public or private, allowing users to either keep their workouts personal or share them with others.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^9.7.4",
+    "morgan": "^1.11.0"
+  }
+}
