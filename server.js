@@ -18,6 +18,17 @@ async function conntectToDB() {
 
 conntectToDB() // connect to database
 
+// middleware imports
+const isSignedIn = require('./middleware/is-signed-in.js')
+const passUserToView = require('./middleware/pass-user-to-view.js')
+
+// controller Imports
+const authController = require('./controllers/auth.controllers.js') //sign up-sign in -logout
+const indexController = require('./controllers/index.controllers.js')
+const routineController = require('./controllers/routine.controllers.js') //create, edit, delete workout routines
+const exerciseController = require('./controllers/exercise.controllers.js') //manage exercises inside a routine
+const logController = require('./controllers/log.controllers.js') //track completed workouts
+
 // Middleware
 app.use(express.static('public')) //all static files are in the public folder
 app.use(express.urlencoded({ extended: false })) // this will allow us to see the data being sent in the POST or PUT
@@ -25,6 +36,11 @@ app.use(methodOverride('_method'))
 app.use(morgan('dev'))
 
 // Routes go here
+app.use('/auth', authController)
+app.use('/', indexController)
+app.use('/routine', routineController)
+app.use('/exercise', exerciseController)
+app.use('/log', logController)
 
 app.listen(3000, () => {
   console.log('App is Running')
