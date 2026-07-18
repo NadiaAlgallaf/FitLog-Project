@@ -36,11 +36,11 @@ app.use(methodOverride('_method'))
 app.use(morgan('dev'))
 
 // Routes go here
-app.use('/auth', authController)
 app.use('/', indexController)
-app.use('/routine', routineController)
-app.use('/exercise', exerciseController)
-app.use('/log', logController)
+app.use('/auth', authController)
+app.use('/routines', routineController)
+app.use('/routines/:routineId/exercisesS', exerciseController)
+app.use('/logs', logController)
 
 app.listen(3000, () => {
   console.log('App is Running')
