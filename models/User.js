@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    userName: {
+    username: {
       type: String,
       required: true,
       minLength: 4,
@@ -28,8 +28,8 @@ const userSchema = new mongoose.Schema(
       type: String
     },
     isAdmin: {
-      type: Boolean,
-      required: true
+      type: Boolean
+      // required: true
     }
   },
   { timestamps: true }
