@@ -6,8 +6,8 @@ const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const morgan = require('morgan')
 
+//connection to the database
 async function conntectToDB() {
-  //connection to the database
   try {
     await mongoose.connect(process.env.MONGODB_URI)
     console.log('Connected to Database')
@@ -39,7 +39,7 @@ app.use(morgan('dev'))
 app.use('/', indexController)
 app.use('/auth', authController)
 app.use('/routines', routineController)
-app.use('/routines/:routineId/exercisesS', exerciseController)
+app.use('/routines/:routineId/exercises', exerciseController)
 app.use('/logs', logController)
 
 app.listen(3000, () => {

@@ -25,6 +25,14 @@ const exerciseSchema = new mongoose.Schema(
     sets: {
       type: mongoose.Schema.ObjectId,
       ref: 'Set'
+    },
+    reps: {
+      type: Number,
+      min: 0,
+      max: 10
+    },
+    weight: {
+      type: String
     }
   },
   { timestamps: true }
