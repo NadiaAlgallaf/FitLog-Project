@@ -36,7 +36,7 @@ const workoutSchema = new mongoose.Schema({
   },
   isPublic: {
     type: Boolean,
-    required: true
+    default: false
   }
 })
 
