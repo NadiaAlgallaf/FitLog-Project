@@ -5,6 +5,7 @@ const dotenv = require('dotenv').config() //this allows me to use my .env values
 const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const morgan = require('morgan')
+const session = require('express-session')
 
 //connection to the database
 async function conntectToDB() {
@@ -34,6 +35,18 @@ app.use(express.static('public')) //all static files are in the public folder
 app.use(express.urlencoded({ extended: false })) // this will allow us to see the data being sent in the POST or PUT
 app.use(methodOverride('_method'))
 app.use(morgan('dev'))
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'fitlog-secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 // 1 day
+    }
+  })
+)
+app.use(passUserToView)
 
 // Routes go here
 app.use('/', indexController)
@@ -42,6 +55,17 @@ app.use('/routines', routineController)
 app.use('/routines/:routineId/exercises', exerciseController)
 app.use('/logs', logController)
 
-app.listen(3000, () => {
-  console.log('App is Running')
-}) // listen on port 3000
+// PROTECTED ROUTES:
+app.use(isSignedIn)
+
+// connect to database and listen on Port 3000
+async function startServer() {
+  const PORT = process.env.PORT || 3000
+  await conntectToDB()
+
+  app.listen(PORT, () => {
+    console.log(`App is running on port ${PORT}`)
+  })
+}
+
+startServer()
