@@ -1,22 +1,17 @@
 const mongoose = require('mongoose')
 
 // Sets Schema
-const setSchema = new mongoose.Schema(
-  {
-    reps: {
-      type: Number,
-      required: true,
-      min: 0,
-      max: 10
-    },
-    weight: {
-      type: Number,
-      required: true,
-      min: 0
-    }
+const setSchema = new mongoose.Schema({
+  reps: {
+    type: Number,
+    required: true,
+    min: 0
   },
-  { timestamps: true }
-)
+  weight: {
+    type: Number,
+    min: 0
+  }
+})
 
 // Exercise Schema
 const exerciseSchema = new mongoose.Schema(
@@ -27,34 +22,33 @@ const exerciseSchema = new mongoose.Schema(
       trim: true
     },
     exerciseGif: {
-      type: String
-    },
-    workout: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Workout',
+      type: String,
       required: true
     },
-    completed: {
-      type: Boolean,
-      default: false
+    muscleGroup: {
+      type: String,
+      required: true,
+      enum: [
+        'Chest',
+        'Back',
+        'Shoulders',
+        'Biceps',
+        'Triceps',
+        'Legs',
+        'Core (Abs)',
+        'Cardio'
+      ]
     },
-    sets: [setSchema]
+    equipment: {
+      type: String
+    },
+    instructions: {
+      type: String
+    }
+    // sets: [setSchema]
   },
   { timestamps: true }
 )
 
 const Exercise = mongoose.model('Exercise', exerciseSchema)
 module.exports = Exercise
-
-//maybe I will use later
-// musculeGroup: {
-//   type: mongoose.Schema.ObjectId,
-//   ref: 'Workout'
-// },
-// equipment: {
-//   type: String,
-//   required: true
-// },
-// instructions: {
-//   type: String
-// }
