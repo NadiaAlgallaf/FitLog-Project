@@ -6,13 +6,17 @@
     <title>Document</title>
   </head>
   <body>
-    <%- include('../views/partials/navbar.ejs') %>
-    <h1>Create Routine page</h1>
-    <form action="./createRoutine.ejs" method="post">
-      <label for="name" id="name">Add title for yor wourkout routine:</label>
-      <input type="text" id="name" />
+    <h1>Add exercise to the database</h1>
+    <form action="./addExercise" method="post">
+      <label for="exercisName">Add an exercise:</label>
+      <input type="text" id="exercisName" name="exercisName" />
       <br /><br />
-      <label for="musculeGroup" id="musculeGroup">Choose muscule Group:</label>
+
+      <label for="exerciseGif">GIF url:</label>
+      <input type="text" id="exerciseGif" name="exerciseGif" />
+      <br /><br />
+
+      <label for="musculeGroup">Select muscle group:</label>
       <select name="musculeGroup" id="musculeGroup">
         <option value="All">Full Body</option>
         <option value="Chest">Chest</option>
@@ -24,20 +28,15 @@
         <option value="Core (Abs)">Core (Abs)</option>
         <option value="Cardio">Cardio</option>
       </select>
-      <br />
-      <br />
-      <label for="exercise">Choose exercise:</label>
-      <select name="exercise" id="exercise">
-        <option value="exercise1">exercise 1</option>
-      </select>
       <br /><br />
-      <label for="sets">Add number of set</label>
-      <input type="number" id="set" />
+
+      <label for="equipment">Add quipments required:</label>
+      <input type="text" id="equipment" name="equipment" />
       <br /><br />
-      <label for="reps">Add number of reps</label>
-      <input type="number" id="reps" />
+
+      <label for="instructions">Instructions</label>
+      <textarea name="instructions" id="instructions"></textarea>
+      <button type="submits">Add</button>
     </form>
-    <br /><br />
-    <button>Add exercise</button>
   </body>
 </html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Create Routine page</h1>
+
+    <form action="routines/new" method="post">
+      <label for="workoutName">Add title for your workout routine:</label>
+      <input type="text" id="workoutName" name="workoutName" required />
+      <br /><br />
+
+      <label for="description">Add description for your workout:</label>
+      <input type="text" id="description" name="description" />
+      <br /><br />
+
+      <label for="isPublic">Do you want to make your routine public?</label>
+      <input type="checkbox" id="isPublic" name="isPublic" />
+      <br /><br />
+
+      <hr />
+
+      <h2>Add an exercise</h2>
+
+      <label for="muscleGroup">Choose muscle group:</label>
+      <select id="muscleGroup" name="muscleGroup">
+        <option value="default">Select muscule..</option>
+        <option value="All">Full Body</option>
+        <option value="Chest">Chest</option>
+        <option value="Back">Back</option>
+        <option value="Shoulders">Shoulders</option>
+        <option value="Biceps">Biceps</option>
+        <option value="Triceps">Triceps</option>
+        <option value="Legs">Legs</option>
+        <option value="Core (Abs)">Core (Abs)</option>
+        <option value="Cardio">Cardio</option>
+      </select>
+      <br /><br />
+
+      <label for="exercise">Choose exercise:</label>
+      <select id="exercise" name="exercise">
+        <option value="">Select exercise..</option>
+      </select>
+      <br /><br />
+
+      <label for="sets">Add number of sets</label>
+      <input type="number" id="sets" name="sets" min="1" />
+      <br /><br />
+
+      <label for="reps">Add number of reps</label>
+      <input type="number" id="reps" name="reps" min="1" />
+      <br /><br />
+
+      <label for="weight">Add the weight</label>
+      <input type="number" id="weight" name="weight" min="0" step="0.5" />
+      <br /><br />
+
+      <button type="button" id="addExerciseBtn">Add exercise</button>
+
+      <br /><br />
+      <hr />
+
+      <h2>Exercises in this routine</h2>
+      <ul id="exerciseList"></ul>
+      <p>No exercises added yet.</p>
+
+      <br />
+      <button type="submit">Save routine</button>
+    </form>
+  </body>
+</html>
