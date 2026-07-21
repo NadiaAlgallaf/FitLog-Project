@@ -28,7 +28,6 @@ const authController = require('./controllers/auth.controllers.js') //sign up-si
 const indexController = require('./controllers/index.controllers.js')
 const routineController = require('./controllers/routine.controllers.js') //create, edit, delete workout routines
 const exerciseController = require('./controllers/exercise.controllers.js') //manage exercises inside a routine
-const logController = require('./controllers/log.controllers.js') //track completed workouts
 
 // Middleware
 app.use(express.static('public')) //all static files are in the public folder
@@ -37,7 +36,7 @@ app.use(methodOverride('_method'))
 app.use(morgan('dev'))
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'fitlog-secret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -53,7 +52,6 @@ app.use('/', indexController)
 app.use('/auth', authController)
 app.use('/routines', routineController)
 app.use('/routines/:routineId/exercises', exerciseController)
-app.use('/logs', logController)
 
 // PROTECTED ROUTES:
 app.use(isSignedIn)
