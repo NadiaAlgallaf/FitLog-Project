@@ -50,11 +50,8 @@ app.use(passUserToView)
 // Routes go here
 app.use('/', indexController)
 app.use('/auth', authController)
-app.use('/routines', routineController)
+app.use('/routines', isSignedIn, routineController)
 app.use('/routines/:routineId/exercises', exerciseController)
-
-// PROTECTED ROUTES:
-app.use(isSignedIn)
 
 // connect to database and listen on Port 3000
 async function startServer() {

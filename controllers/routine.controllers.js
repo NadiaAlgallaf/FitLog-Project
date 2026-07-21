@@ -1,9 +1,7 @@
 const express = require('express')
-const isSignedIn = require('../middleware/is-signed-in')
 const router = express.Router()
 const Workout = require('../models/Workout')
 const Exercise = require('../models/Exercise')
-const WorkoutExercise = require('../models/WorkoutExercise')
 
 //get: list the user workout routines
 router.get('/', async (req, res) => {
@@ -33,9 +31,10 @@ router.post('/', async (req, res) => {
     }
 
     const createdWorkout = await Workout.create(req.body)
-    res.redirect('/routines/add-exercises/' + createdWorkout._id)
+    res.redirect(`/routines/${createdWorkout._id}/exercises`)
   } catch (err) {
     console.log('ERROR in creating Workout routines', err)
+    res.redirect('/routines/new')
   }
 })
 
@@ -49,7 +48,7 @@ router.get('/add-exercises/:id', async (req, res) => {
     const workout = await Workout.findById(req.params.id)
 
     // 3. pass both to the ejs page
-    res.render('routine/createRoutine.ejs', exercises, workout)
+    res.render('routine/createRoutine.ejs', { exercises, workout })
   } catch (err) {
     console.log(err)
     res.redirect('/routines')
@@ -73,14 +72,21 @@ router.get('/:id/edit', async (req, res) => {
   })
 })
 
-router.post('/add-exercises/:id', (req, res) => {
-  res.render('routine/createRoutine.ejs')
-})
-router.get('/:id', (req, res) => {
-  res.send(`Routines ${req.params.id}`)
-})
+//put: update routine
+router.put('/:id', async (req, res) => {
+  if (req.body.isPublic === 'on') {
+    req.body.isPublic = true
+  } else {
+    req.body.isPublic = false
+  }
 
-router.delete('/:id', (req, res) => {
-  res.send(`Deleted routine ${req.params.id}`)
+  await Workout.findByIdAndUpdate(req.params.id, req.body)
+
+  res.redirect(`/routines/${req.params.id}`)
+})
+//delete: delete routine
+router.delete('/:id', async (req, res) => {
+  await Workout.findByIdAndDelete(req.params.id)
+  res.redirect('/routines')
 })
 module.exports = router
