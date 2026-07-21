@@ -1,11 +1,11 @@
 const express = require('express')
 const isSignedIn = require('../middleware/is-signed-in')
 const router = express.Router()
-
 const Workout = require('../models/Workout')
+const Exercise = require('../models/Exercise')
 const WorkoutExercise = require('../models/WorkoutExercise')
 
-//list the user workout routines
+//get: list the user workout routines
 router.get('/', async (req, res) => {
   try {
     const routines = await Workout.find({ owner: req.session.user._id })
@@ -25,7 +25,12 @@ router.get('/new', (req, res) => {
 router.post('/', async (req, res) => {
   try {
     req.body.owner = req.session.user._id
-    req.body.isPublic = req.body.isPublic === 'on'
+
+    if (req.body.isPublic === 'on') {
+      req.body.isPublic = true
+    } else {
+      req.body.isPublic = false
+    }
 
     const createdWorkout = await Workout.create(req.body)
     res.redirect('/routines/add-exercises/' + createdWorkout._id)
@@ -49,6 +54,15 @@ router.get('/add-exercises/:id', async (req, res) => {
     console.log(err)
     res.redirect('/routines')
   }
+})
+
+// get: show one routine
+router.get('/:id', async (req, res) => {
+  const routine = await Workout.findById(req.params.id)
+
+  res.render('routine/showRoutine.ejs', {
+    routine
+  })
 })
 
 router.post('/add-exercises/:id', (req, res) => {
