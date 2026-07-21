@@ -6,8 +6,18 @@
     <title>Document</title>
   </head>
   <body>
-    <%- include('../views/partials/navbar.ejs') %>
+    <%- include('partials/navbar.ejs') %>
     <h1>FitLog Homepage</h1>
-    <p>Welcome to FitLog App</p>
+    <p>Create and manage your workout routines.</p>
+
+    <% if (user) { %>
+      <h2>Welcome <%= user.username %></h2>
+
+      <a href="/routines">My Routines</a>
+      <a href="/routines/new">Create Routine</a>
+    <% } else { %>
+      <a href="/auth/sign-in">Sign In</a>
+      <a href="/auth/sign-up">Create Account</a>
+    <% } %>
   </body>
 </html>
