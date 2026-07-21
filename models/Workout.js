@@ -3,7 +3,7 @@ const User = require('../models/User')
 
 //Workout schema
 const workoutSchema = new mongoose.Schema({
-  user: {
+  owner: {
     type: mongoose.Schema.ObjectId,
     ref: 'User'
   },
@@ -11,29 +11,32 @@ const workoutSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  discription: {
+  description: {
     type: String
   },
-  muscleGroup: {
-    type: String,
-    required: true,
-    enum: [
-      'All',
-      'Chest',
-      'Back',
-      'Shoulders',
-      'Biceps',
-      'Triceps',
-      'Legs',
-      'Core (Abs)',
-      'Cardio'
-    ]
-  },
-  exersise: {
-    type: String,
-    required: true
-    //enum: [] add exercises
-  },
+  // muscleGroup: {
+  //   type: String,
+  //   required: true,
+  //   enum: [
+  //     'All',
+  //     'Chest',
+  //     'Back',
+  //     'Shoulders',
+  //     'Biceps',
+  //     'Triceps',
+  //     'Legs',
+  //     'Core (Abs)',
+  //     'Cardio'
+  //   ]
+  // },
+  exercise: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Exercise'
+      // required: true
+      //enum: [] add exercises
+    }
+  ],
   isPublic: {
     type: Boolean,
     default: false

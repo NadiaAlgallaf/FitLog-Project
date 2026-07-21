@@ -8,6 +8,7 @@ const Workout = require('../models/Workout')
 router.get('/', isSignedIn, async (req, res) => {
   try {
     const routines = await Workout.find({ owner: req.session.user._id })
+    res.render('routine/indexRoutine.ejs')
   } catch (err) {
     console.log('ERROR in Listing the Workout routines')
     res.redirect('/')
@@ -15,21 +16,30 @@ router.get('/', isSignedIn, async (req, res) => {
 })
 
 //get: form to create routine
-router.get('/new', isSignedIn, (req, res) => {
-  res.render('../views/routine/createRoutine.ejs')
+router.get('/new', isSignedIn, async (req, res) => {
+  const allExercises = await Exercise.find()
+  res.render('routine/StartRoutine.ejs', { exercises: allExercises })
 })
 
-//post: create routine
-router.post('/', isSignedIn, async (req, res) => {
+router.post('/new', isSignedIn, async (req, res) => {
   try {
     req.body.owner = req.session.user._id
     req.body.isPublic = req.body.isPublic === 'on'
-    await Wourkout.create(req.body)
-    res.redirect('/routines')
+    const createdWorkout = await Workout.create(req.body)
+    res.redirect('/routines/add-exercises/' + createdWorkout._id)
   } catch (err) {
-    console.log('ERROR in creating Workout routines')
-    res.redirect('/routines/new')
+    console.log('ERROR in creating Workout routines', err)
   }
+})
+router.get('/add-exercises/:id', (req, res) => {
+  // 1. get all exercises from the database
+  // 2. get the workout with the id from req.params
+  // 3. pass both to the ejs page
+  res.render('routine/createRoutine.ejs')
+})
+
+router.post('/add-exercises/:id', (req, res) => {
+  res.render('routine/createRoutine.ejs')
 })
 router.get('/:id', (req, res) => {
   res.send(`Routines ${req.params.id}`)
