@@ -1,11 +1,14 @@
 const mongoose = require('mongoose')
+
 const setSchema = new mongoose.Schema({
   reps: {
     type: Number,
-    require: true
+    required: true,
+    min: 1
   },
   weight: {
-    type: Number
+    type: Number,
+    min: 0
   }
 })
 
