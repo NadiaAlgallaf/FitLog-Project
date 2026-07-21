@@ -65,6 +65,14 @@ router.get('/:id', async (req, res) => {
   })
 })
 
+// get: show edit page
+router.get('/:id/edit', async (req, res) => {
+  const routine = await Workout.findById(req.params.id)
+  res.render('routine/editRoutine.ejs', {
+    routine
+  })
+})
+
 router.post('/add-exercises/:id', (req, res) => {
   res.render('routine/createRoutine.ejs')
 })
