@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const morgan = require('morgan')
 const session = require('express-session')
+const { MongoStore } = require('connect-mongo')
 
 //connection to the database
 async function conntectToDB() {
@@ -38,7 +39,13 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
+
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+      collectionName: 'sessions'
+    }),
+
     cookie: {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 // 1 day
@@ -51,7 +58,7 @@ app.use(passUserToView)
 app.use('/', indexController)
 app.use('/auth', authController)
 app.use('/routines', isSignedIn, routineController)
-app.use('/routines/:routineId/exercises', exerciseController)
+app.use('/routines/:routineId/exercises', isSignedIn, exerciseController)
 
 // connect to database and listen on Port 3000
 async function startServer() {
