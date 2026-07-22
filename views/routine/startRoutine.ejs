@@ -3,25 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Create Routine</title>
   </head>
-  <body>
-    <%- include('../partials/navbar.ejs') %>
-    <h1>Create Routine</h1>
 
-    <form action="/routines" method="post">
-      <label for="workoutName">Workout title:</label>
+  <body>
+    <h1>Create a New Routine</h1>
+
+    <form action="/routines" method="POST">
+      <label for="workoutName">Routine name:</label>
+
       <input type="text" id="workoutName" name="workoutName" required />
+
       <br /><br />
 
       <label for="description">Description:</label>
-      <textarea name="description" id="description"></textarea>
+
+      <textarea id="description" name="description" rows="4"></textarea>
+
       <br /><br />
 
-      <label for="isPublic">Make your routine public?</label>
+      <label for="isPublic">Make this routine public:</label>
+
       <input type="checkbox" id="isPublic" name="isPublic" />
+
       <br /><br />
+
       <button type="submit">Create Routine</button>
     </form>
+
+    <br />
+
+    <a href="/routines">Cancel</a>
   </body>
 </html>
