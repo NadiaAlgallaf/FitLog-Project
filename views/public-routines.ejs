@@ -3,40 +3,80 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Public Routines</title>
+
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
 
   <body>
-    <h1>Public Workout Routines</h1>
+    <%- include('./partials/navbar.ejs') %>
 
-    <% if (routines.length === 0) { %>
-      <p>No public routines found.</p>
-    <% } else { %>
-      <% for (let routine of routines) { %>
-        <div>
-          <h2>
-            <a href="/routines/<%= routine._id %>">
-              <%= routine.workoutName %>
-            </a>
-          </h2>
+    <main class="page-container">
+      <div class="page-heading">
+        <p class="small-title">Community</p>
 
-          <% if (routine.description) { %>
-            <p><%= routine.description %></p>
-          <% } %>
+        <h1>Public Workout Routines</h1>
 
-          <% if (routine.owner) { %>
-            <p>Created by: <%= routine.owner.username %></p>
-          <% } %>
+        <p class="secondary-text">
+          Browse workout routines shared by other users.
+        </p>
+      </div>
 
-          <a href="/routines/<%= routine._id %>">
-            View Routine
-          </a>
+      <% if (routines.length === 0) { %>
+
+        <div class="empty-card">
+          <h2>No Public Routines</h2>
+
+          <p>
+            There are no public routines available yet.
+          </p>
         </div>
 
-        <hr />
-      <% } %>
-    <% } %>
+      <% } else { %>
 
-    <a href="/">Back to Home</a>
+        <div class="routine-list">
+
+          <% for (let routine of routines) { %>
+
+            <div class="routine-card">
+
+              <div class="routine-info">
+                <h2><%= routine.workoutName %></h2>
+
+                <% if (routine.description) { %>
+                  <p><%= routine.description %></p>
+                <% } %>
+
+                <% if (routine.owner) { %>
+                  <p class="secondary-text">
+                    Created by: <%= routine.owner.username %>
+                  </p>
+                <% } %>
+              </div>
+
+              <div class="routine-actions">
+                <a
+                  href="/routines/<%= routine._id %>"
+                  class="primary-button"
+                >
+                  View Routine
+                </a>
+              </div>
+
+            </div>
+
+          <% } %>
+
+        </div>
+
+      <% } %>
+
+      <div class="bottom-actions">
+        <a href="/" class="secondary-button">
+          Back to Home
+        </a>
+      </div>
+    </main>
   </body>
 </html>

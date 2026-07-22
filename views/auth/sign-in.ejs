@@ -3,23 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Sign In</title>
+
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
+
   <body>
-    <h1>Sign in</h1>
-    <form action="/auth/sign-in" method="POST">
-      <label for="username">Username:</label>
-      <input type="text" name="username" id="username" required />
+    <%- include('../partials/navbar.ejs') %>
 
-      <br /><br />
+    <main class="page-container">
+      <div class="content-container">
+        <div class="page-heading">
+          <p class="small-title">Welcome Back</p>
 
-      <label for="password">Password:</label>
-      <input type="password" name="password" id="password" required />
+          <h1>Sign In</h1>
 
-      <br /><br />
+          <p class="secondary-text">Sign in to manage your workout routines.</p>
+        </div>
 
-      <button type="submit">Sign in</button>
-      <p>Don't have an account? <a href="/auth/sign-up">Sign Up</a></p>
-    </form>
+        <form class="form-card" action="/auth/sign-in" method="POST">
+          <div class="form-group">
+            <label for="username">Username</label>
+
+            <input type="text" name="username" id="username" required />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+
+            <input type="password" name="password" id="password" required />
+          </div>
+
+          <button type="submit" class="primary-button">Sign In</button>
+
+          <p class="form-link">
+            Don't have an account?
+            <a href="/auth/sign-up">Sign Up</a>
+          </p>
+        </form>
+      </div>
+    </main>
   </body>
 </html>

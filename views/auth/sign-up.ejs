@@ -3,33 +3,59 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Sign Up</title>
+
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
+
   <body>
-    <h1>Sign Up</h1>
-    <form action="/auth/sign-up" method="post">
-      <label for="username">Username:</label>
-      <input type="text" name="username" id="username" required />
+    <%- include('../partials/navbar.ejs') %>
 
-      <br /><br />
+    <main class="page-container">
+      <div class="content-container">
+        <div class="page-heading">
+          <p class="small-title">Create Account</p>
 
-      <label for="password">Password:</label>
-      <input type="password" name="password" id="password" required />
+          <h1>Sign Up</h1>
 
-      <br /><br />
+          <p class="secondary-text">
+            Create an account to start building your workout routines.
+          </p>
+        </div>
 
-      <label for="confirmPassword">Confirm Password:</label>
-      <input
-        type="password"
-        name="confirmPassword"
-        id="confirmPassword"
-        required
-      />
+        <form class="form-card" action="/auth/sign-up" method="POST">
+          <div class="form-group">
+            <label for="username">Username</label>
 
-      <br /><br />
+            <input type="text" name="username" id="username" required />
+          </div>
 
-      <button type="submit">Sign Up</button>
-    </form>
-    <p>Already have an account? <a href="/auth/sign-in">Sign In</a></p>
+          <div class="form-group">
+            <label for="password">Password</label>
+
+            <input type="password" name="password" id="password" required />
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+
+            <input
+              type="password"
+              name="confirmPassword"
+              id="confirmPassword"
+              required
+            />
+          </div>
+
+          <button type="submit" class="primary-button">Sign Up</button>
+
+          <p class="form-link">
+            Already have an account?
+            <a href="/auth/sign-in">Sign In</a>
+          </p>
+        </form>
+      </div>
+    </main>
   </body>
 </html>

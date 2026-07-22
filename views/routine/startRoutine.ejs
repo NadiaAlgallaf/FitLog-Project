@@ -3,36 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/style.css" />
     <title>Create Routine</title>
   </head>
 
   <body>
-    <h1>Create a New Routine</h1>
+    <%- include('../partials/navbar.ejs') %>
 
-    <form action="/routines" method="POST">
-      <label for="workoutName">Routine name:</label>
+    <main class="form-page">
+      <div class="form-card">
+        <p class="small-title">Workout</p>
 
-      <input type="text" id="workoutName" name="workoutName" required />
+        <h1>Create New Routine</h1>
 
-      <br /><br />
+        <form action="/routines" method="POST">
+          <label for="workoutName">Routine Name</label>
 
-      <label for="description">Description:</label>
+          <input type="text" id="workoutName" name="workoutName" required />
 
-      <textarea id="description" name="description" rows="4"></textarea>
+          <label for="description">Description</label>
 
-      <br /><br />
+          <textarea id="description" name="description" rows="4"></textarea>
 
-      <label for="isPublic">Make this routine public:</label>
+          <div class="checkbox-row">
+            <input type="checkbox" id="isPublic" name="isPublic" />
 
-      <input type="checkbox" id="isPublic" name="isPublic" />
+            <label for="isPublic"> Make this routine public </label>
+          </div>
 
-      <br /><br />
+          <button type="submit" class="primary-button">Create Routine</button>
+        </form>
 
-      <button type="submit">Create Routine</button>
-    </form>
-
-    <br />
-
-    <a href="/routines">Cancel</a>
+        <a href="/routines" class="secondary-button cancel-button"> Cancel </a>
+      </div>
+    </main>
   </body>
 </html>

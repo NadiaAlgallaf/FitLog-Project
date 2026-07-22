@@ -4,39 +4,67 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FitLog</title>
+
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
 
   <body>
-    <h1>Welcome to FitLog</h1>
+    <nav class="navbar">
+      <a href="/" class="logo">FitLog</a>
 
-    <p>Create workout routines and track your exercises.</p>
+      <div class="nav-links">
+        <a href="/public-routines">Public Routines</a>
 
-    <% if (user) { %>
-      <p>Welcome, <%= user.username %></p>
+        <% if (user) { %>
+          <a href="/routines">My Routines</a>
+          <a href="/auth/sign-out">Sign Out</a>
+        <% } else { %>
+          <a href="/auth/sign-up">Sign Up</a>
+          <a href="/auth/sign-in">Sign In</a>
+        <% } %>
+      </div>
+    </nav>
 
-      <a href="/routines">My Routines</a>
+    <main class="home-container">
+      <% if (user) { %>
+        <p class="welcome-text">
+          Welcome, <%= user.username %>
+        </p>
+      <% } %>
 
-      <br /><br />
+      <h1>Welcome to FitLog</h1>
 
-      <a href="/routines/new">Create New Routine</a>
+      <p class="home-description">
+        Create workout routines and track your exercises.
+      </p>
 
-      <br /><br />
+      <div class="home-buttons">
+        <% if (user) { %>
+          <a href="/routines/new" class="button primary-button">
+            Create New Routine
+          </a>
 
-      <a href="/public-routines">View Public Routines</a>
+          <a href="/routines" class="button secondary-button">
+            My Routines
+          </a>
 
-      <br /><br />
+          <a href="/public-routines" class="button secondary-button">
+            Public Routines
+          </a>
+        <% } else { %>
+          <a href="/auth/sign-up" class="button primary-button">
+            Sign Up
+          </a>
 
-      <a href="/auth/sign-out">Sign Out</a>
-    <% } else { %>
-      <a href="/auth/sign-up">Sign Up</a>
+          <a href="/auth/sign-in" class="button secondary-button">
+            Sign In
+          </a>
 
-      <br /><br />
-
-      <a href="/auth/sign-in">Sign In</a>
-
-      <br /><br />
-
-      <a href="/public-routines">View Public Routines</a>
-    <% } %>
+          <a href="/public-routines" class="button secondary-button">
+            Public Routines
+          </a>
+        <% } %>
+      </div>
+    </main>
   </body>
 </html>

@@ -1,12 +1,16 @@
-<nav>
-  <a href="/">Homepage</a>
+<nav class="navbar">
+  <div class="nav-logo">
+    <a href="/">FitLog</a>
+  </div>
 
-  <% if (user) { %>
-  <a href="/routines">My Routines</a>
-  <a href="/routines/new">Create Workout</a>
-  <a href="/auth/sign-out">Log Out</a>
-  <% } else { %>
-  <a href="/auth/sign-in">Sign In</a>
-  <a href="/auth/sign-up">Sign Up</a>
-  <% } %>
+  <div class="nav-links">
+    <% if (user) { %>
+      <a href="/routines">My Routines</a>
+      <a href="/routines/new">Create Workout</a>
+      <a href="/auth/sign-out">Log Out</a>
+    <% } else { %>
+      <a href="/auth/sign-in">Sign In</a>
+      <a href="/auth/sign-up">Sign Up</a>
+    <% } %>
+  </div>
 </nav>

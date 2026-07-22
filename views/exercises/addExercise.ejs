@@ -3,106 +3,149 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Add Exercise</title>
+
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
 
   <body>
     <%- include('../partials/navbar.ejs') %>
-    <h1>Add Exercise to <%= workout.workoutName %></h1>
 
-    <form
-      action="/routines/<%= workout._id %>/exercises"
-      method="POST"
-    >
-      <label for="exercise">Select exercise:</label>
+    <main class="page-container">
+      <div class="page-heading">
+        <p class="small-title">Build Your Routine</p>
 
-      <select name="exercise" id="exercise" required>
-        <option value="">Choose an exercise</option>
+        <h1><%= workout.workoutName %></h1>
 
-        <% for (let exercise of exercises) { %>
-          <option value="<%= exercise._id %>">
-            <%= exercise.exerciseName %> -
-            <%= exercise.muscleGroup %>
-          </option>
-        <% } %>
-      </select>
+        <p class="secondary-text">
+          Choose an exercise and enter the number of sets, reps, and weight.
+        </p>
+      </div>
 
-      <br /><br />
+      <div class="content-container">
+        <form
+          class="form-card"
+          action="/routines/<%= workout._id %>/exercises"
+          method="POST"
+        >
+          <div class="form-group">
+            <label for="exercise">Select exercise</label>
 
-      <label for="numberOfSets">Number of sets:</label>
-      <input
-        type="number"
-        id="numberOfSets"
-        name="numberOfSets"
-        min="1"
-        value="3"
-        required
-      />
+            <select name="exercise" id="exercise" required>
+              <option value="">Choose an exercise</option>
 
-      <br /><br />
+              <% for (let exercise of exercises) { %>
+                <option value="<%= exercise._id %>">
+                  <%= exercise.exerciseName %> -
+                  <%= exercise.muscleGroup %>
+                </option>
+              <% } %>
+            </select>
+          </div>
 
-      <label for="reps">Reps:</label>
-      <input
-        type="number"
-        id="reps"
-        name="reps"
-        min="1"
-        value="10"
-        required
-      />
+          <div class="form-group">
+            <label for="numberOfSets">Number of sets</label>
 
-      <br /><br />
+            <input
+              type="number"
+              id="numberOfSets"
+              name="numberOfSets"
+              min="1"
+              value="3"
+              required
+            />
+          </div>
 
-      <label for="weight">Weight:</label>
-      <input
-        type="number"
-        id="weight"
-        name="weight"
-        min="0"
-        value="0"
-        required
-      />
+          <div class="form-group">
+            <label for="reps">Reps</label>
 
-      <br /><br />
+            <input
+              type="number"
+              id="reps"
+              name="reps"
+              min="1"
+              value="10"
+              required
+            />
+          </div>
 
-      <button type="submit">Add Exercise</button>
-    </form>
+          <div class="form-group">
+            <label for="weight">Weight</label>
 
-    <hr />
+            <input
+              type="number"
+              id="weight"
+              name="weight"
+              min="0"
+              value="0"
+              required
+            />
+          </div>
 
-    <h2>Exercises Added to This Routine</h2>
+          <button type="submit" class="primary-button">
+            Add Exercise
+          </button>
+        </form>
 
-    <% if (workoutExercises.length === 0) { %>
-      <p>No exercises added yet.</p>
-    <% } else { %>
-      <% for (let workoutExercise of workoutExercises) { %>
-        <div>
-          <h3><%= workoutExercise.exercise.exerciseName %></h3>
+        <section class="added-exercises-section">
+          <div class="section-heading">
+            <h2>Exercises Added</h2>
 
-          <p>
-            Muscle group:
-            <%= workoutExercise.exercise.muscleGroup %>
-          </p>
-
-          <p>
-            Number of sets:
-            <%= workoutExercise.sets.length %>
-          </p>
-
-          <% for (let set of workoutExercise.sets) { %>
-            <p>
-              <%= set.reps %> reps -
-              <%= set.weight %> kg
+            <p class="secondary-text">
+              These exercises are already inside this routine.
             </p>
+          </div>
+
+          <% if (workoutExercises.length === 0) { %>
+            <div class="empty-card">
+              <h3>No Exercises Yet</h3>
+
+              <p>
+                Add your first exercise using the form.
+              </p>
+            </div>
+          <% } else { %>
+            <div class="added-exercise-list">
+              <% for (let workoutExercise of workoutExercises) { %>
+                <div class="added-exercise-card">
+                  <h3>
+                    <%= workoutExercise.exercise.exerciseName %>
+                  </h3>
+
+                  <p>
+                    <strong>Muscle group:</strong>
+                    <%= workoutExercise.exercise.muscleGroup %>
+                  </p>
+
+                  <p>
+                    <strong>Number of sets:</strong>
+                    <%= workoutExercise.sets.length %>
+                  </p>
+
+                  <div class="set-summary-list">
+                    <% for (let set of workoutExercise.sets) { %>
+                      <div class="set-summary">
+                        <span><%= set.reps %> reps</span>
+                        <span><%= set.weight %> kg</span>
+                      </div>
+                    <% } %>
+                  </div>
+                </div>
+              <% } %>
+            </div>
           <% } %>
-        </div>
+        </section>
+      </div>
 
-        <hr />
-      <% } %>
-    <% } %>
-
-    <a href="/routines/<%= workout._id %>">
-      Finish Routine
-    </a>
+      <div class="bottom-actions">
+        <a
+          href="/routines/<%= workout._id %>"
+          class="secondary-button"
+        >
+          Finish Routine
+        </a>
+      </div>
+    </main>
   </body>
 </html>
