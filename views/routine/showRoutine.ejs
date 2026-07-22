@@ -3,27 +3,184 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title><%= routine.workoutName %></title>
   </head>
+
   <body>
-    <%- include('../partials/navbar.ejs') %>
-
     <h1><%= routine.workoutName %></h1>
-    <p><%= routine.description %></p>
-    <p>Public: <%= routine.isPublic %></p>
 
-    <a href="/routines/<%= routine._id %>/edit">Edit</a>
+    <% if (routine.description) { %>
+      <p><%= routine.description %></p>
+    <% } %>
 
-    <br /><br />
+    <% if (routine.owner) { %>
+      <p>Created by: <%= routine.owner.username %></p>
+    <% } %>
 
-    <form action="/routines/<%= routine._id %>?_method=Delete" method="post">
-      <button>Delete</button>
-    </form>
-    <br />
+    <% if (routine.isPublic) { %>
+      <p>This routine is public.</p>
+    <% } else { %>
+      <p>This routine is private.</p>
+    <% } %>
 
-    <a href="/routines/add-exercises/<%= routine._id %>">Add Exercises</a>
-    <br /><br />
+    <% if (isOwner) { %>
+    <a href="/routines/<%= routine._id %>/exercises/new">
+  Add Exercise
+</a>
 
-    <a href="/routines">Back</a>
+      <br /><br />
+
+      <a href="/routines/<%= routine._id %>/edit">
+        Edit Routine
+      </a>
+
+      <br /><br />
+    <% } %>
+
+    <h2>Exercises</h2>
+
+    <% if (workoutExercises.length === 0) { %>
+      <p>No exercises have been added to this routine.</p>
+    <% } else { %>
+
+      <% for (let workoutExercise of workoutExercises) { %>
+        <div>
+          <% if (workoutExercise.exercise) { %>
+            <h3>
+              <%= workoutExercise.exercise.exerciseName %>
+            </h3>
+
+            <% if (workoutExercise.exercise.exerciseGif) { %>
+              <img
+                src="<%= workoutExercise.exercise.exerciseGif %>"
+                alt="<%= workoutExercise.exercise.exerciseName %>"
+                width="200"
+              />
+            <% } %>
+
+            <p>
+              Muscle group:
+              <%= workoutExercise.exercise.muscleGroup %>
+            </p>
+
+            <p>
+              Equipment:
+              <%= workoutExercise.exercise.equipment %>
+            </p>
+
+            <p>
+              Instructions:
+              <%= workoutExercise.exercise.instructions %>
+            </p>
+          <% } %>
+
+          <h4>Sets</h4>
+
+          <% if (workoutExercise.sets.length === 0) { %>
+            <p>No sets found.</p>
+          <% } else { %>
+
+            <% for (let set of workoutExercise.sets) { %>
+              <% if (isOwner) { %>
+
+                <form
+                  action="/routines/<%= routine._id %>/exercises/<%= workoutExercise._id %>/sets/<%= set._id %>?_method=PUT"
+                  method="POST"
+                >
+                  <label for="reps-<%= set._id %>">Reps:</label>
+
+                  <input
+                    type="number"
+                    id="reps-<%= set._id %>"
+                    name="reps"
+                    min="1"
+                    value="<%= set.reps %>"
+                    required
+                  />
+
+                  <label for="weight-<%= set._id %>">Weight:</label>
+
+                  <input
+                    type="number"
+                    id="weight-<%= set._id %>"
+                    name="weight"
+                    min="0"
+                    value="<%= set.weight %>"
+                    required
+                  />
+
+                  <label for="completed-<%= set._id %>">
+                    Completed:
+                  </label>
+
+                  <input
+                    type="checkbox"
+                    id="completed-<%= set._id %>"
+                    name="completed"
+                    <% if (set.completed) { %>
+                      checked
+                    <% } %>
+                  />
+                </form>
+
+              <% } else { %>
+
+                <p>
+                  Reps: <%= set.reps %> |
+                  Weight: <%= set.weight %> kg |
+
+                  <% if (set.completed) { %>
+                    Completed
+                  <% } else { %>
+                    Not completed
+                  <% } %>
+                </p>
+
+              <% } %>
+
+              <br />
+            <% } %>
+
+          <% } %>
+
+          <% if (isOwner) { %>
+            <a
+              href="/routines/<%= routine._id %>/exercises/<%= workoutExercise._id %>/edit"
+            >
+              Edit Exercise
+            </a>
+
+            <br /><br />
+
+            <form
+              action="/routines/<%= routine._id %>/exercises/<%= workoutExercise._id %>?_method=DELETE"
+              method="POST"
+            >
+              <button type="submit">
+                Delete Exercise
+              </button>
+            </form>
+          <% } %>
+        </div>
+
+        <hr />
+      <% } %>
+
+    <% } %>
+
+    <% if (isOwner) { %>
+      <form
+        action="/routines/<%= routine._id %>?_method=DELETE"
+        method="POST"
+      >
+        <button type="submit">
+          Delete Routine
+        </button>
+      </form>
+
+      <br />
+    <% } %>
+
+    <a href="/routines">Back to My Routines</a>
   </body>
 </html>
