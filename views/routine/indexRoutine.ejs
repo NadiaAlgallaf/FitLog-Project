@@ -3,14 +3,107 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+
+    <title>My Routines</title>
+
+    <link rel="stylesheet" href="/style.css" />
   </head>
+
   <body>
     <%- include('../partials/navbar.ejs') %>
-    <h1>All my routines</h1>
-    <!-- loop throught the routines -->
-    <% for(let routine of routines) {%>
-        <a href="/routines/add-exercises/<%= routine._id%>"><%= routine.workoutName %></a>
-      <%} %>
+
+    <main class="page-container">
+      <div class="page-heading">
+        <div>
+          <p class="small-title">Your workouts</p>
+          <h1>My Workout Routines</h1>
+        </div>
+
+        <a href="/routines/new" class="primary-button">
+          Create New Routine
+        </a>
+      </div>
+
+      <% if (routines.length === 0) { %>
+        <div class="empty-card">
+          <h2>No routines yet</h2>
+
+          <p>
+            You have not created any workout routines yet.
+          </p>
+
+          <a href="/routines/new" class="primary-button">
+            Create Your First Routine
+          </a>
+        </div>
+      <% } else { %>
+
+        <div class="routine-grid">
+          <% for (let routine of routines) { %>
+            <div class="routine-card">
+              <div class="routine-card-heading">
+                <div>
+                  <p class="small-title">Workout Routine</p>
+
+                  <h2>
+                    <a href="/routines/<%= routine._id %>">
+                      <%= routine.workoutName %>
+                    </a>
+                  </h2>
+                </div>
+
+                <% if (routine.isPublic) { %>
+                  <span class="public-badge">Public</span>
+                <% } else { %>
+                  <span class="private-badge">Private</span>
+                <% } %>
+              </div>
+
+              <% if (routine.description) { %>
+                <p class="routine-description">
+                  <%= routine.description %>
+                </p>
+              <% } else { %>
+                <p class="routine-description">
+                  No description added.
+                </p>
+              <% } %>
+
+              <div class="card-buttons">
+                <a
+                  href="/routines/<%= routine._id %>"
+                  class="primary-button"
+                >
+                  View Routine
+                </a>
+
+                <a
+                  href="/routines/<%= routine._id %>/edit"
+                  class="secondary-button"
+                >
+                  Edit Routine
+                </a>
+
+                <form
+                  action="/routines/<%= routine._id %>?_method=DELETE"
+                  method="POST"
+                >
+                  <button type="submit" class="delete-button">
+                    Delete Routine
+                  </button>
+                </form>
+              </div>
+            </div>
+          <% } %>
+        </div>
+
+      <% } %>
+
+      <div class="back-link">
+        <a href="/" class="secondary-button">
+          Back to Home
+        </a>
+      </div>
+    </main>
   </body>
 </html>
