@@ -1,97 +1,109 @@
 const express = require('express')
 const router = express.Router({ mergeParams: true })
+
 const Exercise = require('../models/Exercise')
+const Workout = require('../models/Workout')
 const WorkoutExercise = require('../models/WorkoutExercise')
 
-// get: to show all exercises in the routine
-router.get('/', async (req, res) => {
+// GET: show add exercise page
+router.get('/new', async (req, res) => {
   try {
     const routineId = req.params.routineId
 
-    const exercises = await WorkoutExercise.find({
+    const workout = await Workout.findById(routineId)
+    const exercises = await Exercise.find()
+
+    const workoutExercises = await WorkoutExercise.find({
       workout: routineId
     }).populate('exercise')
 
-    res.render('allExercises.ejs', {
+    res.render('exercises/addExercise.ejs', {
+      workout,
       exercises,
-      routineId
+      workoutExercises
     })
   } catch (error) {
-    console.log('Error showing exercises:', error)
+    console.log('Error opening add exercise page:', error)
     res.redirect('/routines')
   }
 })
 
-// post: Add an exercise to routine
+// POST: add exercise to routine
 router.post('/', async (req, res) => {
   try {
-    const routineId = req.params.routineId
+    const sets = []
+
+    for (let i = 0; i < req.body.numberOfSets; i++) {
+      sets.push({
+        reps: req.body.reps,
+        weight: req.body.weight,
+        completed: false
+      })
+    }
 
     await WorkoutExercise.create({
-      workout: routineId,
+      workout: req.params.routineId,
       exercise: req.body.exercise,
-      sets: [
-        {
-          reps: req.body.reps,
-          weight: req.body.weight
-        }
-      ]
+      sets: sets
     })
 
-    res.redirect(`/routines/${routineId}/exercises`)
+    res.redirect(`/routines/${req.params.routineId}/exercises/new`)
   } catch (error) {
     console.log('Error adding exercise:', error)
-    res.redirect('/routines')
+    res.redirect(`/routines/${req.params.routineId}/exercises/new`)
   }
 })
-// get: to show the edit form
+
+// GET: show edit exercise page
 router.get('/:id/edit', async (req, res) => {
   try {
     const workoutExercise = await WorkoutExercise.findById(
       req.params.id
     ).populate('exercise')
 
-    res.render('exercises/editExercise.ejs', {
+    res.render('exercises/editWorkoutExercise.ejs', {
       workoutExercise,
       routineId: req.params.routineId
     })
   } catch (error) {
     console.log('Error opening edit page:', error)
-    res.redirect(`/routines/${req.params.routineId}/exercises`)
+    res.redirect(`/routines/${req.params.routineId}`)
   }
 })
 
-// put: Update reps, weight, or completed
+// PUT: update exercise
 router.put('/:id', async (req, res) => {
   try {
-    const completed = req.body.completed === 'on'
+    const sets = []
+
+    for (let i = 0; i < req.body.numberOfSets; i++) {
+      sets.push({
+        reps: req.body.reps,
+        weight: req.body.weight,
+        completed: false
+      })
+    }
 
     await WorkoutExercise.findByIdAndUpdate(req.params.id, {
-      sets: [
-        {
-          reps: req.body.reps,
-          weight: req.body.weight
-        }
-      ],
-      completed: completed
+      sets: sets
     })
 
-    res.redirect(`/routines/${req.params.routineId}/exercises`)
+    res.redirect(`/routines/${req.params.routineId}`)
   } catch (error) {
     console.log('Error updating exercise:', error)
-    res.redirect(`/routines/${req.params.routineId}/exercises`)
+    res.redirect(`/routines/${req.params.routineId}`)
   }
 })
 
-// delete: to remove exercise from routine
+// DELETE: remove exercise
 router.delete('/:id', async (req, res) => {
   try {
     await WorkoutExercise.findByIdAndDelete(req.params.id)
 
-    res.redirect(`/routines/${req.params.routineId}/exercises`)
+    res.redirect(`/routines/${req.params.routineId}`)
   } catch (error) {
     console.log('Error deleting exercise:', error)
-    res.redirect(`/routines/${req.params.routineId}/exercises`)
+    res.redirect(`/routines/${req.params.routineId}`)
   }
 })
 
