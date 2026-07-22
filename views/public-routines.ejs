@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Public Routines</title>
+  </head>
+
+  <body>
+    <h1>Public Workout Routines</h1>
+
+    <% if (routines.length === 0) { %>
+      <p>No public routines found.</p>
+    <% } else { %>
+      <% for (let routine of routines) { %>
+        <div>
+          <h2>
+            <a href="/routines/<%= routine._id %>">
+              <%= routine.workoutName %>
+            </a>
+          </h2>
+
+          <% if (routine.description) { %>
+            <p><%= routine.description %></p>
+          <% } %>
+
+          <% if (routine.owner) { %>
+            <p>Created by: <%= routine.owner.username %></p>
+          <% } %>
+
+          <a href="/routines/<%= routine._id %>">
+            View Routine
+          </a>
+        </div>
+
+        <hr />
+      <% } %>
+    <% } %>
+
+    <a href="/">Back to Home</a>
+  </body>
+</html>
