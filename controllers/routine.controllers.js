@@ -4,10 +4,20 @@ const Workout = require('../models/Workout')
 const Exercise = require('../models/Exercise')
 const WorkoutExercise = require('../models/WorkoutExercise')
 
+async function findOwnedWorkout(req) {
+  return Workout.findOne({
+    _id: req.params.id,
+    owner: req.session.user._id
+  })
+}
+
 //get: list the user workout routines
 router.get('/', async (req, res) => {
   try {
-    const routines = await Workout.find({ owner: req.session.user._id })
+    const routines = await Workout.find({ owner: req.session.user._id }).sort({
+      createdAt: -1
+    })
+
     res.render('routine/indexRoutine.ejs', { routines })
   } catch (err) {
     console.log('ERROR in Listing the Workout routines', err)
@@ -30,7 +40,7 @@ router.post('/', async (req, res) => {
       owner: req.session.user._id
     })
 
-    res.redirect(`/routines/${workout._id}/exercises`)
+    res.redirect(`/routines/${workout._id}/exercises/new`)
   } catch (err) {
     console.log('Error creating routine:', err)
     res.redirect('/routines/new')
@@ -63,14 +73,21 @@ router.get('/add-exercises/:id', async (req, res) => {
 })
 
 router.post('/new/:workoutId/AddExercise', async (req, res) => {
-  req.body.workout = req.params.workoutId
-  req.body.sets = {
-    reps: req.body.weight,
-    weight: req.body.weight
-  }
+  try {
+    req.body.workout = req.params.workoutId
 
-  await WorkoutExercise.create(req.body)
-  res.redirect(`/routines/add-exercises/${req.params.workoutId}`)
+    req.body.sets = {
+      reps: req.body.reps,
+      weight: req.body.weight
+    }
+
+    await WorkoutExercise.create(req.body)
+
+    res.redirect(`/routines/add-exercises/${req.params.workoutId}`)
+  } catch (err) {
+    console.log('Error adding exercise:', err)
+    res.redirect(`/routines/add-exercises/${req.params.workoutId}`)
+  }
 })
 
 // get: show one routine
@@ -104,39 +121,49 @@ router.get('/:id', async (req, res) => {
 
 // get: show edit page
 router.get('/:id/edit', async (req, res) => {
-  const routine = await Workout.findById({
-    _id: req.params.id,
-    owner: req.session.user._id
-  })
-  res.render('routine/editRoutine.ejs', {
-    routine
-  })
+  try {
+    const routine = await findOwnedWorkout(req)
+
+    if (!routine) return res.redirect('/routines')
+
+    res.render('routine/editRoutine.ejs', {
+      routine
+    })
+  } catch (err) {
+    console.log('Error opening edit page:', err)
+    res.redirect('/routines')
+  }
 })
 
 //put: update routine
 router.put('/:id', async (req, res) => {
-  if (req.body.isPublic === 'on') {
-    req.body.isPublic = true
-  } else {
-    req.body.isPublic = false
+  try {
+    const routine = await findOwnedWorkout(req)
+
+    if (!routine) return res.redirect('/routines')
+
+    routine.workoutName = req.body.workoutName
+    routine.description = req.body.description
+    routine.isPublic = req.body.isPublic === 'on'
+
+    await routine.save()
+
+    res.redirect(`/routines/${routine._id}`)
+  } catch (err) {
+    console.log('Error updating routine:', err)
+    res.redirect('/routines')
   }
-
-  await Workout.findByIdAndUpdate(req.params.id, req.body)
-
-  res.redirect(`/routines/${req.params.id}`)
 })
+
 //delete: delete routine
 router.delete('/:id', async (req, res) => {
   try {
-    const routine = await Workout.findOne({
-      _id: req.params.id,
-      owner: req.session.user._id
-    })
+    const routine = await findOwnedWorkout(req)
 
     if (!routine) return res.redirect('/routines')
 
     await WorkoutExercise.deleteMany({ workout: routine._id })
-    await Workout.findByIdAndDelete(routine._id)
+    await routine.deleteOne()
 
     res.redirect('/routines')
   } catch (err) {
