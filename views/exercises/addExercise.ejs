@@ -3,40 +3,106 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Add Exercise</title>
   </head>
+
   <body>
-    <h1>Add exercise to the database</h1>
-    <form action="./addExercise" method="post">
-      <label for="exercisName">Add an exercise:</label>
-      <input type="text" id="exercisName" name="exercisName" />
-      <br /><br />
+    <%- include('../partials/navbar.ejs') %>
+    <h1>Add Exercise to <%= workout.workoutName %></h1>
 
-      <label for="exerciseGif">GIF url:</label>
-      <input type="text" id="exerciseGif" name="exerciseGif" />
-      <br /><br />
+    <form
+      action="/routines/<%= workout._id %>/exercises"
+      method="POST"
+    >
+      <label for="exercise">Select exercise:</label>
 
-      <label for="musculeGroup">Select muscle group:</label>
-      <select name="musculeGroup" id="musculeGroup">
-        <option value="All">Full Body</option>
-        <option value="Chest">Chest</option>
-        <option value="Back">Back</option>
-        <option value="Shoulders">Shoulders</option>
-        <option value="Biceps">Biceps</option>
-        <option value="Triceps">Triceps</option>
-        <option value="Legs">Legs</option>
-        <option value="Core (Abs)">Core (Abs)</option>
-        <option value="Cardio">Cardio</option>
+      <select name="exercise" id="exercise" required>
+        <option value="">Choose an exercise</option>
+
+        <% for (let exercise of exercises) { %>
+          <option value="<%= exercise._id %>">
+            <%= exercise.exerciseName %> -
+            <%= exercise.muscleGroup %>
+          </option>
+        <% } %>
       </select>
+
       <br /><br />
 
-      <label for="equipment">Add quipments required:</label>
-      <input type="text" id="equipment" name="equipment" />
+      <label for="numberOfSets">Number of sets:</label>
+      <input
+        type="number"
+        id="numberOfSets"
+        name="numberOfSets"
+        min="1"
+        value="3"
+        required
+      />
+
       <br /><br />
 
-      <label for="instructions">Instructions</label>
-      <textarea name="instructions" id="instructions"></textarea>
-      <button type="submits">Add</button>
+      <label for="reps">Reps:</label>
+      <input
+        type="number"
+        id="reps"
+        name="reps"
+        min="1"
+        value="10"
+        required
+      />
+
+      <br /><br />
+
+      <label for="weight">Weight:</label>
+      <input
+        type="number"
+        id="weight"
+        name="weight"
+        min="0"
+        value="0"
+        required
+      />
+
+      <br /><br />
+
+      <button type="submit">Add Exercise</button>
     </form>
+
+    <hr />
+
+    <h2>Exercises Added to This Routine</h2>
+
+    <% if (workoutExercises.length === 0) { %>
+      <p>No exercises added yet.</p>
+    <% } else { %>
+      <% for (let workoutExercise of workoutExercises) { %>
+        <div>
+          <h3><%= workoutExercise.exercise.exerciseName %></h3>
+
+          <p>
+            Muscle group:
+            <%= workoutExercise.exercise.muscleGroup %>
+          </p>
+
+          <p>
+            Number of sets:
+            <%= workoutExercise.sets.length %>
+          </p>
+
+          <% for (let set of workoutExercise.sets) { %>
+            <p>
+              <%= set.reps %> reps -
+              <%= set.weight %> kg
+            </p>
+          <% } %>
+        </div>
+
+        <hr />
+      <% } %>
+    <% } %>
+
+    <a href="/routines/<%= workout._id %>">
+      Finish Routine
+    </a>
   </body>
 </html>
