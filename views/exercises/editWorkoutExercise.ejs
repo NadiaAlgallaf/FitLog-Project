@@ -8,12 +8,11 @@
   </head>
 
   <body>
+    <%- include('../partials/navbar.ejs') %>
     <h1>Edit <%= workoutExercise.exercise.exerciseName %></h1>
 
-    <p>Routine: <%= workout.workoutName %></p>
-
     <form
-      action="/routines/<%= workout._id %>/exercises/<%= workoutExercise._id %>?_method=PUT"
+      action="/routines/<%= routineId %>/exercises/<%= workoutExercise._id %>?_method=PUT"
       method="POST"
     >
       <label for="numberOfSets">Number of sets:</label>
@@ -60,6 +59,6 @@
 
     <br />
 
-    <a href="/routines/<%= workout._id %>"> Cancel </a>
+    <a href="/routines/add-exercises/<%= routineId %>"> Cancel </a>
   </body>
 </html>
