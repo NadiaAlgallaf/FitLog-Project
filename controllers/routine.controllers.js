@@ -47,46 +47,28 @@ router.post('/', async (req, res) => {
   }
 })
 
-//get: show one routine (to add exercises)
-router.get('/add-exercises/:id', async (req, res) => {
-  try {
-    // 1. get all exercises from the database
-    const exercises = await Exercise.find()
-
-    // 2. get the workout with the id from req.params
-    const workout = await Workout.findById(req.params.id)
-
-    const allMyWorkouts = await WorkoutExercise.find({
-      workout: req.params.id
-    }).populate('exercise')
-
-    // 3. pass both to the ejs page
-    res.render('routine/createRoutine.ejs', {
-      exercises,
-      workout,
-      allMyWorkouts
-    })
-  } catch (err) {
-    console.log(err)
-    res.redirect('/routines')
-  }
+// legacy route: redirect old add-exercises URLs to the routine page
+router.get('/add-exercises/:id', (req, res) => {
+  res.redirect(`/routines/${req.params.id}`)
 })
 
+// legacy add-exercise POST path support
 router.post('/new/:workoutId/AddExercise', async (req, res) => {
   try {
     req.body.workout = req.params.workoutId
-
-    req.body.sets = {
-      reps: req.body.reps,
-      weight: req.body.weight
-    }
+    req.body.sets = [
+      {
+        reps: req.body.reps,
+        weight: req.body.weight
+      }
+    ]
 
     await WorkoutExercise.create(req.body)
 
-    res.redirect(`/routines/add-exercises/${req.params.workoutId}`)
+    res.redirect(`/routines/${req.params.workoutId}/exercises/new`)
   } catch (err) {
     console.log('Error adding exercise:', err)
-    res.redirect(`/routines/add-exercises/${req.params.workoutId}`)
+    res.redirect(`/routines/${req.params.workoutId}/exercises/new`)
   }
 })
 
