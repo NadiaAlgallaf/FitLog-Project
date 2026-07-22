@@ -6,18 +6,19 @@
     <title>Document</title>
   </head>
   <body>
-    <h1>Create Routine page</h1>
+    <%- include('../partials/navbar.ejs') %>
+    <h1>Create Routine</h1>
 
-    <form action="/routines/new/" method="post">
-      <label for="workoutName">Add title for your workout routine:</label>
+    <form action="/routines" method="post">
+      <label for="workoutName">Workout title:</label>
       <input type="text" id="workoutName" name="workoutName" required />
       <br /><br />
 
-      <label for="description">Add description for your workout:</label>
-      <input type="text" id="description" name="description" />
+      <label for="description">Description:</label>
+      <textarea name="description" id="description"></textarea>
       <br /><br />
 
-      <label for="isPublic">Do you want to make your routine public?</label>
+      <label for="isPublic">Make your routine public?</label>
       <input type="checkbox" id="isPublic" name="isPublic" />
       <br /><br />
       <button type="submit">Create Routine</button>

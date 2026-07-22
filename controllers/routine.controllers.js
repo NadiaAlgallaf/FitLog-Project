@@ -30,8 +30,8 @@ router.post('/', async (req, res) => {
       req.body.isPublic = false
     }
 
-    const createdWorkout = await Workout.create(req.body)
-    res.redirect(`/routines/${createdWorkout._id}/exercises`)
+    const workout = await Workout.create(req.body)
+    res.redirect(`/routines/add-exercises/${workout._id}`)
   } catch (err) {
     console.log('ERROR in creating Workout routines', err)
     res.redirect('/routines/new')
