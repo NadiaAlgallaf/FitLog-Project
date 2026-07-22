@@ -8,5 +8,9 @@
   <body>
     <%- include('../partials/navbar.ejs') %>
     <h1>All my routines</h1>
+    <!-- loop throught the routines -->
+    <% for(let routine of routines) {%>
+        <a href="/routines/add-exercises/<%= routine._id%>"><%= routine.workoutName %></a>
+      <%} %>
   </body>
 </html>
