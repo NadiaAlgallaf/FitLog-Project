@@ -3,21 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>FitLog</title>
   </head>
+
   <body>
-    <%- include('partials/navbar.ejs') %>
-    <h1>FitLog Homepage</h1>
-    <p>Create and manage your workout routines.</p>
+    <h1>Welcome to FitLog</h1>
+
+    <p>Create workout routines and track your exercises.</p>
 
     <% if (user) { %>
-      <h2>Welcome <%= user.username %></h2>
+      <p>Welcome, <%= user.username %></p>
 
       <a href="/routines">My Routines</a>
-      <a href="/routines/new">Create Routine</a>
+
+      <br /><br />
+
+      <a href="/routines/new">Create New Routine</a>
+
+      <br /><br />
+
+      <a href="/public-routines">View Public Routines</a>
+
+      <br /><br />
+
+      <a href="/auth/sign-out">Sign Out</a>
     <% } else { %>
+      <a href="/auth/sign-up">Sign Up</a>
+
+      <br /><br />
+
       <a href="/auth/sign-in">Sign In</a>
-      <a href="/auth/sign-up">Create Account</a>
+
+      <br /><br />
+
+      <a href="/public-routines">View Public Routines</a>
     <% } %>
   </body>
 </html>
