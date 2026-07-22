@@ -1,18 +1,48 @@
 const express = require('express')
-const router = express.Router()
+const router = express.Router({ mergeParams: true })
 const Exercise = require('../models/Exercise')
-const Workout = require('../models/Workout')
 const WorkoutExercise = require('../models/WorkoutExercise')
-const isSignedIn = require('../middleware/is-signed-in')
 
-router.get('/', (req, res) => {
-  res.send(`Exercises routine for ${req.params.routineId}`)
+// get: to show all exercises in the routine
+router.get('/', async (req, res) => {
+  try {
+    const routineId = req.params.routineId
+
+    const exercises = await WorkoutExercise.find({
+      workout: routineId
+    }).populate('exercise')
+
+    res.render('allExercises.ejs', {
+      exercises,
+      routineId
+    })
+  } catch (error) {
+    console.log('Error showing exercises:', error)
+    res.redirect('/routines')
+  }
 })
 
-router.post('/', (req, res) => {
-  res.send('Exercise added')
+// post: Add an exercise to routine
+router.post('/', async (req, res) => {
+  try {
+    const routineId = req.params.routineId
+
+    await WorkoutExercise.create({
+      workout: routineId,
+      exercise: req.body.exercise,
+      sets: [
+        {
+          reps: req.body.reps,
+          weight: req.body.weight
+        }
+      ]
+    })
+
+    res.redirect(`/routines/${routineId}/exercises`)
+  } catch (error) {
+    console.log('Error adding exercise:', error)
+    res.redirect('/routines')
+  }
 })
-router.delete('/:id', (req, res) => {
-  res.send(`Deleted exercise ${req.params.id}`)
-})
+
 module.exports = router
