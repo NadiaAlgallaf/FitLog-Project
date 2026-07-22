@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 //Workout schema
 const workoutSchema = new mongoose.Schema({
   owner: {
-    type: mongoose.Schema.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     reqiuired: true
   },

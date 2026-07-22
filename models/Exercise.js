@@ -31,6 +31,10 @@ const exerciseSchema = new mongoose.Schema(
     },
     instructions: {
       type: String
+    },
+    workout: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Workout'
     }
   },
   { timestamps: true }

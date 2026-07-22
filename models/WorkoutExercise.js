@@ -1,16 +1,13 @@
 const mongoose = require('mongoose')
 
-const setSchema = new mongoose.Schema({
-  reps: {
-    type: Number,
-    required: true,
-    min: 1
+const setSchema = new mongoose.Schema(
+  {
+    reps: { type: Number, required: true, min: 1 },
+    weight: { type: Number, required: true, min: 0, default: 0 },
+    completed: { type: Boolean, default: false }
   },
-  weight: {
-    type: Number,
-    min: 0
-  }
-})
+  { timestamps: true }
+)
 
 const workoutExerciseSchema = new mongoose.Schema(
   {
@@ -26,12 +23,7 @@ const workoutExerciseSchema = new mongoose.Schema(
       required: true
     },
 
-    sets: [setSchema],
-
-    completed: {
-      type: Boolean,
-      default: false
-    }
+    sets: [setSchema]
   },
   { timestamps: true }
 )
